@@ -56,4 +56,42 @@ public class Login {
         WebElement userID = driver.findElement(By.id("header-details-user-fullname"));
         assertEquals("user18", userID.getAttribute("data-username"));
     }
+
+    @Test
+    public void wrongUsername() {
+
+        Wait wait = new FluentWait(driver).ignoring(NoSuchElementException.class).withTimeout(5, TimeUnit.SECONDS);
+        driver.findElement(By.id("login-form-username")).sendKeys("user18");
+        driver.findElement((By.id("login-form-password"))).sendKeys("0123");
+        driver.findElement(By.id("login")).click();
+        boolean messageFound;
+        try {
+            wait.until(ExpectedConditions.presenceOfElementLocated(By.xpath("//p[.='Sorry, your username and password are incorrect - please try again.']")));
+            messageFound = true;
+        }
+        catch (TimeoutException e) {
+            messageFound = false;
+        }
+        assertEquals(true, messageFound);
+        //TODO captcha????
+    }
+
+    @Test
+    public void wrongPassword() {
+
+        Wait wait = new FluentWait(driver).ignoring(NoSuchElementException.class).withTimeout(5, TimeUnit.SECONDS);
+        driver.findElement(By.id("login-form-username")).sendKeys("Lobab");
+        driver.findElement((By.id("login-form-password"))).sendKeys("0123");
+        driver.findElement(By.id("login")).click();
+        boolean messageFound;
+        try {
+            wait.until(ExpectedConditions.presenceOfElementLocated(By.xpath("//p[.='Sorry, your username and password are incorrect - please try again.']")));
+            messageFound = true;
+        }
+        catch (TimeoutException e) {
+            messageFound = false;
+        }
+        assertEquals(true, messageFound);
+
+    }
 }
