@@ -43,8 +43,7 @@ public class EditIssue {
         wait.until(ExpectedConditions.presenceOfElementLocated(By.xpath("//*[@id=\"aui-flag-container\"]/div/div/a")));
         driver.findElement(By.xpath("//*[@id=\"aui-flag-container\"]/div/div/a")).click();
         wait.until(ExpectedConditions.presenceOfElementLocated(By.id("summary-val")));
-        WebElement editIssue = driver.findElement(By.id("edit-issue"));
-        assertEquals("Edit", editIssue.getText());
+        assertTrue(isEditButtonPresent());
 
         // Delete test issue
         wait.until(ExpectedConditions.elementToBeClickable(By.xpath("//*[@id=\"opsbar-operations_more\"]")));
@@ -53,6 +52,32 @@ public class EditIssue {
         driver.findElement(By.xpath("//*[@id=\"delete-issue\"]/a/span")).click();
         wait.until(ExpectedConditions.elementToBeClickable(By.id("delete-issue-submit")));
         driver.findElement(By.id("delete-issue-submit")).click();
+    }
 
+    @Test
+    public void checkCoalaEditPossible() {
+        driver.get("https://jira.codecool.codecanvas.hu/issues/?jql=project%20%3D%20COALA");
+        assertTrue(isEditButtonPresent());
+    }
+
+    @Test
+    public void checkJetiEditPossible() {
+        driver.get("https://jira.codecool.codecanvas.hu/issues/?jql=project%20%3D%20JETI");
+        assertTrue(isEditButtonPresent());
+    }
+
+    @Test
+    public void checkToucanEditPossible() {
+        driver.get("https://jira.codecool.codecanvas.hu/issues/?jql=project%20%3D%20TOUCAN");
+        assertTrue(isEditButtonPresent());
+    }
+
+    public boolean isEditButtonPresent() {
+        try {
+            driver.findElement(By.id("edit-issue"));
+            return  true;
+        } catch (NoSuchElementException e) {
+            return false;
+        }
     }
 }
