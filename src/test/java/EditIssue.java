@@ -43,7 +43,7 @@ public class EditIssue {
         wait.until(ExpectedConditions.presenceOfElementLocated(By.xpath("//*[@id=\"aui-flag-container\"]/div/div/a")));
         driver.findElement(By.xpath("//*[@id=\"aui-flag-container\"]/div/div/a")).click();
         wait.until(ExpectedConditions.presenceOfElementLocated(By.id("summary-val")));
-        assertTrue(isEditButtonPresent());
+        assertTrue(isEditButtonDisplayed());
 
         // Delete test issue
         wait.until(ExpectedConditions.elementToBeClickable(By.xpath("//*[@id=\"opsbar-operations_more\"]")));
@@ -55,28 +55,30 @@ public class EditIssue {
     }
 
     @Test
-    public void checkCoalaEditPossible() {
+    public void checkCoalaEditPossible() throws InterruptedException {
         driver.get("https://jira.codecool.codecanvas.hu/issues/?jql=project%20%3D%20COALA");
-        assertTrue(isEditButtonPresent());
+        Thread.sleep(5000);
+        assertTrue(isEditButtonDisplayed()); // TODO: make this work
     }
 
     @Test
     public void checkJetiEditPossible() {
+        Wait wait = new FluentWait(driver).ignoring(NoSuchElementException.class).withTimeout(20, TimeUnit.SECONDS);
         driver.get("https://jira.codecool.codecanvas.hu/issues/?jql=project%20%3D%20JETI");
-        assertTrue(isEditButtonPresent());
+        assertTrue(isEditButtonDisplayed());
     }
 
     @Test
     public void checkToucanEditPossible() {
+        Wait wait = new FluentWait(driver).ignoring(NoSuchElementException.class).withTimeout(20, TimeUnit.SECONDS);
         driver.get("https://jira.codecool.codecanvas.hu/issues/?jql=project%20%3D%20TOUCAN");
-        assertTrue(isEditButtonPresent());
+        assertTrue(isEditButtonDisplayed());
     }
 
-    public boolean isEditButtonPresent() {
-        try {
-            driver.findElement(By.id("edit-issue"));
-            return  true;
-        } catch (NoSuchElementException e) {
+    public boolean isEditButtonDisplayed() {
+        if(driver.findElement(By.id("edit-issue")).isDisplayed()){
+            return true;
+        } else {
             return false;
         }
     }
